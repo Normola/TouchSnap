@@ -6,7 +6,7 @@ exports.cycle = function() {
     ];
     
     // TODO: Parameterise this.
-    amqp.connect('amqp://192.168.1.107', function (err, conn) {
+    amqp.connect('amqp://localhost', function (err, conn) {
         console.error(err);
         conn.createChannel(function (err, ch) {
             ch.assertQueue('pythonCommandQueue', { durable: false });
