@@ -12,7 +12,7 @@ exports.cycle = function() {
             ch.assertQueue('pythonCommandQueue', { durable: false });
             ch.assertQueue('pythonResults', { durable: false });
 
-            ch.sendToQueue('pythonCommandQueue', new Buffer(JSON.stringify(input)));
+            ch.sendToQueue('pythonCommandQueue', new Buffer.from(JSON.stringify(input)));
             ch.consume('pythonResults', function(msg) {
                 res.send(msg.content.toString());
             }, { noAck: true });
