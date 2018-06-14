@@ -19,14 +19,22 @@ exports.cycle = function() {
     var connection = "amqp://" + settings.login + ":" + settings.password + "@" + settings.host + ":" + settings.port; 
     
     amqp.connect(connection, function(err, conn) {
+        if (err != undefined && err != '') {
+            console.log(" [x] Error during connect: %s", err);
+            bail(err);
+        }
         conn.createChannel(function (err, ch) {
+            if (err != undefined && err != '') {
+                console.log(" [x] Error during createChannel: %s", err);
+                bail(err);
+            }
             var exchange = 'pythonCommandQueue';
-            var command = 'cycleLights';
+            var commandJson = { command: "cycleLights" };
 
-            ch.assertExchange(exchange, 'fanout', { durable: false });
-            ch.publish(exchange, '', Buffer.from(command));
+            ch.assertQueue(exchange, { durable: false });
+            ch.sendToQueue(exchange, Buffer.from(JSON.stringify(commandJson)));
 
-            console.log(" [x] Sent %s", command);
+            console.log(" [o] Sent %s", command);
         });
 
         setTimeout(function() { conn.close(); process.exit(0); }, 500);
