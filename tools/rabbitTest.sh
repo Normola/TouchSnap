@@ -1,0 +1,1 @@
+curl -i -u jim:jim http://192.168.1.107:5672/api/whoami
